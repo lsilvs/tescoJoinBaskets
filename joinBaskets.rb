@@ -40,15 +40,19 @@ class JoinBaskets
       opt.click
       form.click_button
 
+      p opt.text
+
       # Iterate through each product on shelfs
       agent.page.parser.css("tbody.shelf tr").each do |row|
         if row.css("p.prodName a").any? and row.css("input.basketItemQuantity").any?
-            product = { 
+          product = { 
             "name" => row.css("p.prodName a").text, 
             "link" => row.css("p.prodName a")[0]["href"],
             "quantity" => row.css("input.basketItemQuantity")[0]["value"],
+            "price" => row.css("p.price span").text,
           }
           @shelf.push(product)
+          p product['quantity'] + " :: " + product['name'] + " :: " + product['price']
         end
       end
     end
