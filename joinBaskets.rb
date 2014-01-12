@@ -41,7 +41,7 @@ class JoinBaskets
       form.click_button
 
       # Iterate through each product on shelfs
-      agent.page.parser.css("tbody.shelf").each do |row|
+      agent.page.parser.css("tbody.shelf tr").each do |row|
         if row.css("p.prodName a").any? and row.css("input.basketItemQuantity").any?
             product = { 
             "name" => row.css("p.prodName a").text, 
