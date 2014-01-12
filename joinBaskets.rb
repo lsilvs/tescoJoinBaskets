@@ -70,6 +70,9 @@ class JoinBaskets
     # Add each product to the main basket
     @shelf.each do |product|
        agent.get(product['link'])
+       form = agent.page.form_with(:id => "fBasket")
+       form.field_with(:name => 'baskets').options.first.click
+       form.click_button
        form = agent.page.form_with(:id => %r{fDetails})
        form.fields[2].value = product['quantity']
        agent.submit(form, form.buttons[0])
