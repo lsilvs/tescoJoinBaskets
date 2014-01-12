@@ -40,7 +40,9 @@ class JoinBaskets
       opt.click
       form.click_button
 
+      p " "
       p opt.text
+      total_price = 0.00
 
       # Iterate through each product on shelfs
       agent.page.parser.css("tbody.shelf tr").each do |row|
@@ -53,8 +55,10 @@ class JoinBaskets
           }
           @shelf.push(product)
           p product['quantity'] + " :: " + product['name'] + " :: " + product['price']
+          total_price = total_price + product['price'].delete('€').to_f
         end
       end
+      p total_price.round(2)
     end
 
     # Access the main basket (My Basket)
