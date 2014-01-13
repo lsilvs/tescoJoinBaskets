@@ -40,9 +40,12 @@ class JoinBaskets
       opt.click
       form.click_button
 
-      p " "
       p opt.text
       total_price = 0.00
+      time = Time.now.strftime("%Y%m%d%H%M").to_s
+      File.open(time, "a") do |f|
+        f.puts(opt.text)
+      end
 
       # Iterate through each product on shelfs
       agent.page.parser.css("tbody.shelf tr").each do |row|
@@ -54,11 +57,18 @@ class JoinBaskets
             "price" => row.css("p.price span").text,
           }
           @shelf.push(product)
-          p product['quantity'] + " :: " + product['name'] + " :: " + product['price']
+          line = product['quantity'] + " :: " + product['name'] + " :: " + product['price'] + " :: " + product['link']
           total_price = total_price + product['price'].delete('€').to_f
+
+          File.open(time, "a") do |f|
+            f.puts(line)
+          end
         end
       end
-      p total_price.round(2)
+      File.open(time, "a") do |f|
+        f.puts("Total: " + total_price.round(2).to_s)
+        f.puts(" ")
+      end
     end
 
     # Access the main basket (My Basket)
