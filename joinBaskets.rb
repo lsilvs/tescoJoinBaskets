@@ -28,7 +28,9 @@ class JoinBaskets
     # Access the main basket (My Basket)
     agent.get("http://www.tesco.ie/groceries/basket/")
     form = agent.page.form_with(:id => "fBasket")
-    form.field_with(:name => 'baskets').options.first.click
+    form.field_with(:name => 'baskets').options.each do |opt|
+      opt.click if opt.text == "My Basket"
+    end
     form.click_button
 
     # Empty the main basket before join the others
@@ -74,18 +76,22 @@ class JoinBaskets
     # Access the main basket (My Basket)
     agent.get("http://www.tesco.ie/groceries/basket/")
     form = agent.page.form_with(:id => "fBasket")
-    form.field_with(:name => 'baskets').options.first.click
+    form.field_with(:name => 'baskets').options.each do |opt|
+        opt.click if opt.text == "My Basket"
+    end
     form.click_button
 
     # Add each product to the main basket
     @shelf.each do |product|
-       agent.get(product['link'])
-       form = agent.page.form_with(:id => "fBasket")
-       form.field_with(:name => 'baskets').options.first.click
-       form.click_button
-       form = agent.page.form_with(:id => %r{fDetails})
-       form.fields[2].value = product['quantity']
-       agent.submit(form, form.buttons[0])
+      agent.get(product['link'])
+      form = agent.page.form_with(:id => "fBasket")
+      form.field_with(:name => 'baskets').options.each do |opt|
+        opt.click if opt.text == "My Basket"
+      end
+      form.click_button
+      form = agent.page.form_with(:id => %r{fDetails})
+      form.fields[2].value = product['quantity']
+      agent.submit(form, form.buttons[0])
     end
 
   p "All your baskets were joined together into the 'My Basket'. Check it out on Tesco.ie ;)"
